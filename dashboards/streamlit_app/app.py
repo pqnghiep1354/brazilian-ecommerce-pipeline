@@ -612,6 +612,6 @@ st.sidebar.markdown("""
 **Brazilian E-Commerce Pipeline**  
 Version 1.0.0  
 Authored by Phạm QUốc Nghiệp  
-E-mail: pqnghiep1354@gmail.com  
-Last updated: December 2025                
+E-mail: pqnghiep1354@gmail.com                        
+Last updated: December 2025
 """)
