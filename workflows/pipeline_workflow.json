@@ -1,0 +1,206 @@
+{
+  "name": "job_brazilian-ecommerce-pipeline Dec 25, 2025, 2:25 PM",
+  "email_notifications": {
+    "on_start": [
+      "pqnghiep1354@gmail.com"
+    ],
+    "on_success": [
+      "pqnghiep1354@gmail.com"
+    ],
+    "on_failure": [
+      "pqnghiep1354@gmail.com"
+    ],
+    "no_alert_for_skipped_runs": false
+  },
+  "webhook_notifications": {},
+  "notification_settings": {
+    "no_alert_for_skipped_runs": false,
+    "no_alert_for_canceled_runs": false
+  },
+  "timeout_seconds": 0,
+  "schedule": {
+    "quartz_cron_expression": "0 0 6 * * ?",
+    "timezone_id": "Asia/Bangkok",
+    "pause_status": "PAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "01_Setup_environment",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/01_setup_environment",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "02_bronze_ingestion",
+      "depends_on": [
+        {
+          "task_key": "01_Setup_environment"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/02_bronze_ingestion",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "03_silver_transformation",
+      "depends_on": [
+        {
+          "task_key": "02_bronze_ingestion"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/03_silver_transformation",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "04_gold_aggregation",
+      "depends_on": [
+        {
+          "task_key": "03_silver_transformation"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/04_gold_aggregation",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "05_business_layer",
+      "depends_on": [
+        {
+          "task_key": "04_gold_aggregation"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/05_business_layer",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "06_streaming_facts",
+      "depends_on": [
+        {
+          "task_key": "05_business_layer"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/06_streaming_facts",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "07_ml_models",
+      "depends_on": [
+        {
+          "task_key": "06_streaming_facts"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/07_ml_models",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "08_revenue_alerts",
+      "depends_on": [
+        {
+          "task_key": "07_ml_models"
+        },
+        {
+          "task_key": "04_gold_aggregation"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/08_revenue_alerts",
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    },
+    {
+      "task_key": "09_data_quality",
+      "depends_on": [
+        {
+          "task_key": "08_revenue_alerts"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "notebooks/09_data_quality",
+        "base_parameters": {
+          "data": "quality"
+        },
+        "source": "GIT"
+      },
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "environment_key": "Setup_environment_environment"
+    }
+  ],
+  "git_source": {
+    "git_url": "https://github.com/pqnghiep1354/brazilian-ecommerce-pipeline.git",
+    "git_provider": "gitHub",
+    "git_commit": "main"
+  },
+  "queue": {
+    "enabled": true
+  },
+  "parameters": [
+    {
+      "name": "environment",
+      "default": "production"
+    }
+  ],
+  "environments": [
+    {
+      "environment_key": "Setup_environment_environment",
+      "spec": {
+        "environment_version": "4"
+      }
+    }
+  ],
+  "performance_target": "PERFORMANCE_OPTIMIZED"
+}
