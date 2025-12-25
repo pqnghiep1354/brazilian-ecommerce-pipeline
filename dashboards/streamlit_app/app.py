@@ -611,5 +611,7 @@ st.sidebar.markdown("---")
 st.sidebar.markdown("""
 **Brazilian E-Commerce Pipeline**  
 Version 1.0.0  
-© 2024 Data Engineering Team
+Authored by Phạm QUốc Nghiệp
+E-mail: pqnghiep1354@gmail.com
+Last updated: December 2025                                  
 """)
